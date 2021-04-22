@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
 /* 
 Implement the deleteHandler in the <UserProfile /> component.
 Specific Instructions:
-- No need to add ```<Router>```, it has been added to index.js
+- No need to add <Router>, it has been added to index.js
 - /user/:userId displays the UserProfile for the specified ID
 - Clicking the "Delete" button waits for the delete to finish then returns the user to the home page /
 */
@@ -12,6 +12,7 @@ Specific Instructions:
 function UserProfile() {
   const [user, setUser] = useState({});
   const { userId } = useParams();
+  const history = useHistory();
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -39,13 +40,15 @@ function UserProfile() {
   ));
 
   const deleteHandler = (event) => {
+    
     // This will be successful but will not actually delete the user.
     fetch(
       `https://jsonplaceholder.typicode.com/users/${userId}`,
       { method: "DELETE" } // the delete method tells the API to delete the user
     )
       .then((response) => response.json())
-      .then((data) => console.log("deleteHandler is not fully implemented"));
+      .then((data) => console.log(`fetch returned:"${data} . Next action= history.push("/")`))
+      .then(() => history.push("/"));
   };
 
   if (user.id) {
